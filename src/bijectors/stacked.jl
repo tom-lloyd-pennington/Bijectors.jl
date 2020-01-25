@@ -21,7 +21,7 @@ b = stack(b1, b2)
 b([0.0, 1.0]) == [b1(0.0), 1.0]  # => true
 ```
 """
-struct Stacked{Bs, N} <: Bijector{1} where N
+struct Stacked{Bs, N} <: Bijector{N}
     bs::Bs
     ranges::NTuple{N, UnitRange{Int}}
 
@@ -43,7 +43,6 @@ struct Stacked{Bs, N} <: Bijector{1} where N
 end
 Stacked(bs, ranges::AbstractArray) = Stacked(bs, tuple(ranges...))
 Stacked(bs) = Stacked(bs, tuple([i:i for i = 1:length(bs)]...))
-
 isclosedform(b::Stacked) = all(isclosedform.(b.bs))
 
 stack(bs::Bijector{0}...) = Stacked(bs)
